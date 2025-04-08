@@ -25,6 +25,7 @@
           "options": {
             "outputPath": "dist/endusermenumania",
             "index": "src/index.html",
+            "baseHref": "./",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
