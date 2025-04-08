@@ -1,0 +1,27 @@
+<app-navbar
+  [restaurantDetails]="restaurantDetails"
+  [cart]="cart"
+  [dishes]="allDishes"
+  (cartChange)="cart = $event"
+  [tableNumber]="tableNumber"
+  [sessionId]="sessionId"
+  [restaurantId]="restaurantId"
+  (cartChange)="addToCart($event)"
+></app-navbar>
+<app-hero (scrollToMenu)="scrollToDishes()"></app-hero>
+<div id="menu" class="mt-12">
+  <app-category
+    [categories]="categories"
+    (categorySelected)="onCategorySelected($event)"
+  ></app-category>
+</div>
+
+<app-dishes
+  (addDishToCart)="addToCart($event)"
+  (extractingCategories)="extractCategories($event)"
+  [restaurantId]="restaurantId"
+  [selectedCategory]="selectedCategory"
+  (sendAllDishes)="getAllDishes($event)"
+></app-dishes>
+
+<app-footer [restaurantDetails]="restaurantDetails"></app-footer>

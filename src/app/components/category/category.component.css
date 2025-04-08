@@ -1,0 +1,42 @@
+.category-button {
+  width: 112px;
+  height: 112px;
+  transition: all 0.3s ease;
+  border: 1px solid #dee2e6 !important;
+}
+
+.category-button:hover {
+  background-color: #e7f5ff !important;
+  transform: scale(1.05);
+}
+
+.category-text {
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.category-button:hover .category-text {
+  color: #0d6efd !important;
+}
+
+.icon-container {
+  transition: background-color 0.3s ease;
+}
+
+.category-button:hover .icon-container {
+  background-color: #c5f3ff !important;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .category-button {
+    width: 144px;
+    height: 144px;
+  }
+  .category-text {
+    font-size: 1.125rem;
+  }
+}

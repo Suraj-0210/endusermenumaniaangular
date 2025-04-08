@@ -1,0 +1,110 @@
+<nav class="p-4 bg-white shadow-sm">
+  <div
+    class="d-flex flex-column flex-md-row justify-content-center align-items-center justify-content-md-between flex-wrap"
+  >
+    <!-- Logo Section -->
+    <div class="d-flex align-items-center mb-3 mb-md-0">
+      <div
+        class="logo-container position-relative border rounded-circle overflow-hidden"
+        style="width: 60px; height: 60px"
+      >
+        <img
+          *ngIf="restaurantDetails?.logo"
+          [src]="restaurantDetails.logo"
+          alt="Logo"
+          class="w-100 h-100 object-fit-cover"
+        />
+      </div>
+      <span class="ms-2 fs-5 fw-semibold d-none d-md-block">
+        {{ restaurantDetails?.restaurantname || "FoodieExpress" }}
+      </span>
+    </div>
+
+    <!-- Search Bar -->
+    <div
+      class="position-relative mx-md-4 my-2 my-md-0 flex-grow-1"
+      style="max-width: 400px"
+    >
+      <div class="input-group">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (input)="filterDishes()"
+          (focus)="showDropdown = true"
+          (blur)="hideDropdown()"
+          placeholder="Search for dishes and drinks"
+          class="form-control rounded-pill pe-5 border-secondary shadow-sm"
+        />
+        <button
+          class="btn btn-warning position-absolute end-0 top-50 translate-middle-y rounded-pill"
+        >
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+
+      <!-- Search Dropdown -->
+      <ul
+        *ngIf="showDropdown && filteredDishes.length > 0"
+        class="position-absolute w-100 mt-1 bg-white border border-secondary rounded shadow-sm z-3 list-unstyled"
+      >
+        <li
+          *ngFor="let dish of filteredDishes"
+          class="d-flex align-items-center p-2 hover-bg-light cursor-pointer"
+        >
+          <img
+            [src]="dish.image"
+            alt="Food Image"
+            class="img-thumbnail me-2"
+            style="width: 40px; height: 40px"
+          />
+          <div class="flex-grow-1">
+            <div class="fw-semibold">{{ dish.name }}</div>
+            <div class="text-muted small">${{ dish.price }}</div>
+          </div>
+          <button (click)="addToCart(dish)" class="btn btn-success btn-sm ms-2">
+            Add
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex align-items-center gap-3 mt-2 mt-md-0">
+      <button (click)="toggleOrders()" class="btn btn-success shadow-sm">
+        Show Orders
+      </button>
+      <div class="position-relative">
+        <button
+          class="btn btn-warning rounded-circle p-2 shadow-sm"
+          (click)="toggleCart()"
+          style="width: 48px; height: 48px"
+        >
+          <i class="bi bi-cart3 fs-5"></i>
+        </button>
+        <span
+          *ngIf="cart.length > 0"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{ cartLength }}
+        </span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<app-cart
+  [order]="cart"
+  [showCart]="showCart"
+  (toggleCart)="toggleCart()"
+  (orderChange)="handleCartUpdate($event)"
+  (orderLengthChange)="updateCartLength($event)"
+  (createOrder)="handleCreateOrder($event)"
+></app-cart>
+
+<app-orders
+  *ngIf="showOrders"
+  [restaurantDetails]="restaurantDetails"
+  [showModal]="showOrders"
+  [paidOrders]="paidOrders"
+  [sessionId]="sessionId"
+></app-orders>

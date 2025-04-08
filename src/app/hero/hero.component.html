@@ -1,0 +1,51 @@
+<div class="position-relative w-100 overflow-hidden" style="height: 500px">
+  <!-- Images -->
+  <div class="position-absolute top-0 start-0 w-100 h-100">
+    <img
+      *ngFor="let image of bannerImages; let i = index"
+      [src]="image"
+      [alt]="'Banner ' + (i + 1)"
+      class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-opacity"
+      [ngClass]="{
+        'opacity-100': i === currentIndex,
+        'opacity-0': i !== currentIndex
+      }"
+      style="
+        transition-duration: 1000ms;
+        transition-timing-function: ease-in-out;
+      "
+    />
+  </div>
+
+  <!-- Overlay -->
+  <div
+    class="position-absolute top-0 start-0 w-100 h-100 bg-opacity-40 d-flex flex-column justify-content-center align-items-center text-white text-center p-3"
+  >
+    <h1 class="display-4 fw-bold mb-4 gradient-text">
+      Welcome to Our Restaurant
+    </h1>
+
+    <p class="fs-5 mb-4 fw-light">Experience the best food, made with love.</p>
+    <button
+      class="btn btn-warning px-5 py-3 fs-5 fw-semibold shadow-lg"
+      (click)="scrollToMenu.emit()"
+      style="transition: all 0.3s ease"
+    >
+      View Menu
+    </button>
+  </div>
+</div>
+
+<!-- Add this CSS in your stylesheet -->
+<style>
+  .gradient-text {
+    background: linear-gradient(to right, #0d6efd, #dc3545);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  .transition-opacity {
+    transition-property: opacity;
+  }
+</style>

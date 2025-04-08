@@ -1,0 +1,85 @@
+<footer class="bg-dark text-white py-5 mt-5">
+  <div class="container">
+    <div
+      class="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center"
+    >
+      <!-- Company Info -->
+      <div class="mb-4 mb-md-0">
+        <h3 class="h2 fw-bold mb-2 brand-hover">
+          {{ restaurantDetails?.restaurantname || "MenuMania" }}
+        </h3>
+        <p class="text-secondary mb-0">
+          Your favorite restaurant in just a few clicks.
+        </p>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="d-none d-md-flex gap-4 mb-4 mb-md-0">
+        <!-- Add links if needed -->
+      </nav>
+
+      <!-- Social Media Icons -->
+      <div class="d-flex gap-4 social-icons">
+        <a
+          href="https://www.facebook.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-secondary social-link"
+          aria-label="Facebook"
+        >
+          <i class="fab fa-facebook-f fs-5"></i>
+        </a>
+        <a
+          href="https://www.twitter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-secondary social-link"
+          aria-label="Twitter"
+        >
+          <i class="fab fa-twitter fs-5"></i>
+        </a>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-secondary social-link"
+          aria-label="Instagram"
+        >
+          <i class="fab fa-instagram fs-5"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="border-top border-dark mt-5 pt-4 text-center">
+      <p class="text-secondary mb-1">
+        © {{ currentYear }} MenuMania. All Rights Reserved.
+      </p>
+      <p class="text-secondary mb-0">Made with ❣️ by Suryakanta Prusty</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Add this CSS -->
+<style>
+  .brand-hover {
+    transition: color 0.3s ease;
+    color: white !important;
+  }
+  .brand-hover:hover {
+    color: #adb5bd !important;
+  }
+
+  .social-link {
+    transition: all 0.3s ease;
+    text-decoration: none !important;
+  }
+
+  .social-link:hover {
+    color: white !important;
+    transform: translateY(-2px);
+  }
+
+  .border-dark {
+    border-color: #343a40 !important;
+  }
+</style>
