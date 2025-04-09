@@ -33,11 +33,19 @@ export class HomeComponent {
     const existingItem = this.cart.find((item) => item._id == dish._id);
 
     if (existingItem) {
-      existingItem.quantity += 1; // Increase quantity if dish exists
+      if (existingItem.quantity < dish.stock) {
+        existingItem.quantity += 1;
+        this.cartService.updateCart(this.cart);
+      } else {
+        alert('Cannot add more. Stock limit reached.');
+      }
     } else {
-      // Add new dish
-      this.cart = [...this.cart, { ...dish, quantity: 1 }];
-      this.cartService.updateCart(this.cart);
+      if (dish.stock > 0) {
+        this.cart = [...this.cart, { ...dish, quantity: 1 }];
+        this.cartService.updateCart(this.cart);
+      } else {
+        alert('Cannot add. Item is out of stock.');
+      }
     }
   }
 

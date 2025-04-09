@@ -9,13 +9,15 @@ import { OrderService } from '../order.service';
 })
 export class OrdersComponent {
   @Input() showModal = false;
-  @Input() paidOrders: any[] = [];
+  @Input() paidOrders: any[] | null = null;
   @Input() sessionId: any;
   @Input() restaurantDetails: any;
   baseURL: string = 'https://endusermenumania.onrender.com';
+  loading: boolean = true;
 
   closeModal() {
     this.showModal = false;
+    this.orderService.closeConnection();
   }
   ngOnChanges() {
     this.sessionId = this.sessionId;
@@ -31,6 +33,7 @@ export class OrdersComponent {
     this.orderService.getOrdersFromDb(this.sessionId).subscribe({
       next: (orders) => {
         this.paidOrders = orders;
+        this.loading = false;
         console.log(orders);
       },
       error: (err) => {

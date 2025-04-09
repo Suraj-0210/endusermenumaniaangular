@@ -6,32 +6,42 @@ import { Observable } from 'rxjs';
 })
 export class OrderService {
   baseURL: string = 'https://endusermenumania.onrender.com';
+  private eventSource: EventSource | null = null;
 
   constructor(private zone: NgZone) {}
 
   getOrdersFromDb(sessionId: string): Observable<any> {
     const url = `${this.baseURL}/api/orders/${sessionId}`;
     return new Observable<any>((observer) => {
-      const eventSource = new EventSource(url);
+      this.eventSource = new EventSource(url);
 
-      eventSource.onmessage = (event) => {
+      this.eventSource.onmessage = (event) => {
         this.zone.run(() => {
           const parsedData = JSON.parse(event.data);
           observer.next(parsedData);
         });
       };
 
-      eventSource.onerror = (error) => {
+      this.eventSource.onerror = (error) => {
         this.zone.run(() => {
           console.error('SSE error:', error);
-          eventSource.close();
+          this.eventSource?.close();
           observer.error(error);
         });
       };
 
       return () => {
-        eventSource.close();
+        this.eventSource?.close();
+        this.eventSource = null;
       };
     });
+  }
+
+  closeConnection() {
+    if (this.eventSource) {
+      this.eventSource.close();
+      this.eventSource = null;
+      console.log('EventSource connection closed.');
+    }
   }
 }

@@ -16,7 +16,7 @@
         />
       </div>
       <span class="ms-2 fs-5 fw-semibold d-none d-md-block">
-        {{ restaurantDetails?.restaurantname || "FoodieExpress" }}
+        {{ restaurantDetails?.restaurantname || "MenuMania" }}
       </span>
     </div>
 
@@ -59,7 +59,9 @@
           />
           <div class="flex-grow-1">
             <div class="fw-semibold">{{ dish.name }}</div>
-            <div class="text-muted small">${{ dish.price }}</div>
+            <div class="text-muted small">
+              <i class="bi bi-currency-rupee"></i> {{ dish.price }}
+            </div>
           </div>
           <button (click)="addToCart(dish)" class="btn btn-success btn-sm ms-2">
             Add

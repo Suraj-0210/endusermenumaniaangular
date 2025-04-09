@@ -23,6 +23,7 @@ export class CartComponent {
       price: 100,
       quantity: 1,
       image: 'burger.jpg',
+      stock: 1,
     },
     {
       _id: '124',
@@ -30,6 +31,7 @@ export class CartComponent {
       price: 200,
       quantity: 2,
       image: 'pizza.jpg',
+      stock: 1,
     },
   ];
 
