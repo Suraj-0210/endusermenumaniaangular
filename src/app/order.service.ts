@@ -44,4 +44,43 @@ export class OrderService {
       console.log('EventSource connection closed.');
     }
   }
+
+  // ✅ Send Order to Backend
+  async sendOrderToBackend(
+    confirmedOrders: any[],
+    restaurantId: string,
+    tableNo: string,
+    sessionId: string,
+    paymentId: string,
+    message: string
+  ): Promise<any> {
+    try {
+      const body = {
+        dishes: confirmedOrders,
+        restaurantId,
+        tableNo,
+        sessionId,
+        paymentId,
+        status: 'Completed',
+        message,
+      };
+
+      const response = await fetch(`${this.baseURL}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to place order.');
+      }
+
+      const result = await response.json();
+      console.log('✅ Order created successfully:', result);
+      return result;
+    } catch (error) {
+      console.error('❌ Failed to create order:', error);
+      throw error;
+    }
+  }
 }

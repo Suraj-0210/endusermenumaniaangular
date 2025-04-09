@@ -6,6 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CartService } from '../cart.service';
+import { OrderService } from '../order.service';
 
 @Component({
   selector: 'app-navbar',
@@ -37,7 +38,10 @@ export class NavbarComponent {
 
   showOrders: boolean = false;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private orderService: OrderService
+  ) {}
 
   ngOnInit() {
     this.cartService.cart$.subscribe((cart) => {
@@ -83,38 +87,36 @@ export class NavbarComponent {
     }, 200);
   }
 
-  handleCreateOrder(event: { paymentId: string; confirmedOrders: any[] }) {
-    const { paymentId, confirmedOrders } = event;
-    this.sendOrderToBackend(paymentId, confirmedOrders);
+  handleCreateOrder(event: {
+    paymentId: string;
+    confirmedOrders: any[];
+    message: string;
+  }) {
+    const { paymentId, confirmedOrders, message } = event;
+    this.sendOrderToBackend(paymentId, confirmedOrders, message);
   }
 
-  async sendOrderToBackend(paymentId: string, confirmedOrders: any[]) {
-    try {
-      const body = {
-        dishes: confirmedOrders,
-        restaurantId: this.restaurantId,
-        tableNo: this.tableNumber,
-        sessionId: this.sessionId,
-        paymentId: paymentId,
-        status: 'Completed',
-      };
-
-      const response = await fetch(`${this.baseURL}/api/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Order created successfully:', result);
+  async sendOrderToBackend(
+    paymentId: string,
+    confirmedOrders: any[],
+    customMessage: string
+  ) {
+    this.orderService
+      .sendOrderToBackend(
+        confirmedOrders,
+        this.restaurantId,
+        this.tableNumber,
+        this.sessionId,
+        paymentId,
+        customMessage
+      )
+      .then((result) => {
         this.confirmedOrders = [];
-      } else {
-        throw new Error('Failed to place order.');
-      }
-    } catch (error) {
-      console.error('Failed to create order:', error);
-    }
+        // maybe close modal or show success alert
+      })
+      .catch((err) => {
+        alert('Failed to place order. Please try again.');
+      });
   }
 
   addToCart(dish: any) {

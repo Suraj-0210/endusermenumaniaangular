@@ -104,6 +104,32 @@
           </div>
         </div>
 
+        <!-- Customization Message -->
+        <div *ngIf="order.length !== 0" class="mb-4">
+          <label
+            for="customMessage"
+            class="form-label fw-semibold text-dark fs-6"
+          >
+            📝 Special Instructions
+          </label>
+          <div class="position-relative">
+            <textarea
+              id="customMessage"
+              class="form-control rounded-4 shadow-sm border-secondary-subtle"
+              rows="3"
+              [(ngModel)]="customMessage"
+              placeholder="E.g., Please make it less spicy, add extra cheese, no onions..."
+              maxlength="250"
+              style="resize: none"
+            ></textarea>
+            <small
+              class="form-text text-muted position-absolute end-0 bottom-0 me-2 mb-1"
+            >
+              {{ customMessage.length || 0 }}/250
+            </small>
+          </div>
+        </div>
+
         <!-- Payment Method -->
         <div *ngIf="order.length !== 0" class="mt-4">
           <label class="form-label fw-semibold">Payment Method</label>

@@ -13,8 +13,10 @@ export class CartComponent {
   @Output() createOrder = new EventEmitter<{
     paymentId: string;
     confirmedOrders: any[];
+    message: any;
   }>();
   payAfterService: boolean = false;
+  customMessage: string = '';
 
   @Input() order = [
     {
@@ -126,9 +128,6 @@ export class CartComponent {
         console.error(err);
         alert('Something went wrong while initiating payment.');
       });
-    // alert(`Order placed! Total: ₹${this.totalPrice}`);
-    // this.order = [];
-    // this.emitCartLength(); // Reset cart count
   }
 
   handlePaymentSuccess(paymentId: string) {
@@ -138,7 +137,11 @@ export class CartComponent {
       quantity: item.quantity,
     }));
 
-    this.createOrder.emit({ paymentId, confirmedOrders }); // emit clean structure
+    this.createOrder.emit({
+      paymentId,
+      confirmedOrders,
+      message: this.customMessage,
+    }); // emit clean structure
     console.log(confirmedOrders);
     this.order = [];
     this.emitCartLength();
