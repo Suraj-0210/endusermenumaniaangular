@@ -1,0 +1,35 @@
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title d-flex align-items-center fw-bold">
+          <i class="bi bi-qr-code me-2 fs-4"></i>Scan to Checkout
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeModal()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body text-center p-4">
+        <img
+          *ngIf="qrCodeUrl"
+          [src]="qrCodeUrl"
+          alt="Checkout QR Code"
+          class="img-fluid rounded mb-3 border shadow"
+          style="max-width: 300px"
+        />
+
+        <p class="text-muted fw-semibold">
+          Please show this QR at the reception or desk of the restaurant.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

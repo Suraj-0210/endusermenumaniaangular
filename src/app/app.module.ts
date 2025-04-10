@@ -14,6 +14,7 @@ import { CategoryComponent } from './components/category/category.component';
 import { DishesComponent } from './components/dishes/dishes.component';
 import { FooterComponent } from './footer/footer.component';
 import { OrdersComponent } from './orders/orders.component';
+import { CheckoutqrComponent } from './components/checkoutqr/checkoutqr.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { OrdersComponent } from './orders/orders.component';
     DishesComponent,
     FooterComponent,
     OrdersComponent,
+    CheckoutqrComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],

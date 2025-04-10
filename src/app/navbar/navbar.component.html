@@ -72,6 +72,13 @@
 
     <!-- Navigation Buttons -->
     <div class="d-flex align-items-center gap-3 mt-2 mt-md-0">
+      <button
+        *ngIf="true"
+        (click)="toggleQRModal()"
+        class="btn btn-outline-primary shadow-sm"
+      >
+        Show QR
+      </button>
       <button (click)="toggleOrders()" class="btn btn-success shadow-sm">
         Show Orders
       </button>
@@ -108,6 +115,11 @@
   *ngIf="showOrders"
   [restaurantDetails]="restaurantDetails"
   [showModal]="showOrders"
-  [paidOrders]="paidOrders"
   [sessionId]="sessionId"
 ></app-orders>
+
+<app-checkoutqr
+  *ngIf="showQRModal"
+  [qrCodeUrl]="qrCodeUrl"
+  (close)="toggleQRModal()"
+></app-checkoutqr>

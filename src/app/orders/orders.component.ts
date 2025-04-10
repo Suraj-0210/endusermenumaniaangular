@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import jsPDF from 'jspdf';
 import { OrderService } from '../order.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-orders',
@@ -9,7 +10,8 @@ import { OrderService } from '../order.service';
 })
 export class OrdersComponent {
   @Input() showModal = false;
-  @Input() paidOrders: any[] | null = null;
+  paidOrders: any[] | null = null;
+
   @Input() sessionId: any;
   @Input() restaurantDetails: any;
   baseURL: string = 'https://endusermenumania.onrender.com';

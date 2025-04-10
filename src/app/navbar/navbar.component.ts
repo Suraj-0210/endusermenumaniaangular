@@ -139,4 +139,12 @@ export class NavbarComponent {
       }
     }
   }
+
+  showQRModal: boolean = false;
+  qrCodeUrl: string =
+    'https://api.qrserver.com/v1/create-qr-code/?data=YourDataHere'; // Replace with actual QR code logic
+
+  toggleQRModal() {
+    this.showQRModal = !this.showQRModal;
+  }
 }
