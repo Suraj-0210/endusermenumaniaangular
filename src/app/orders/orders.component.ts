@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import jsPDF from 'jspdf';
 import { OrderService } from '../order.service';
 import { Observable } from 'rxjs';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-orders',
@@ -25,7 +26,10 @@ export class OrdersComponent {
     this.sessionId = this.sessionId;
     console.log(this.paidOrders);
   }
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit() {
     this.getOrders();
