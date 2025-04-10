@@ -15,6 +15,7 @@ export class CartComponent {
     confirmedOrders: any[];
     message: any;
   }>();
+  @Input() sessionId: any;
   payAfterService: boolean = false;
   customMessage: string = '';
 
@@ -81,6 +82,7 @@ export class CartComponent {
       this.order = [];
       this.emitCartLength();
       this.cartService.updateCart([]);
+      this.customMessage = '';
       return;
     }
 
@@ -105,8 +107,8 @@ export class CartComponent {
               this.handlePaymentSuccess(response.razorpay_payment_id);
               this.order = [];
               this.emitCartLength();
-              // this.orderChange.emit([]);
               this.cartService.updateCart([]);
+              this.customMessage = '';
             },
             prefill: {
               name: 'Customer Name',

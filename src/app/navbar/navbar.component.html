@@ -101,6 +101,7 @@
   (orderChange)="handleCartUpdate($event)"
   (orderLengthChange)="updateCartLength($event)"
   (createOrder)="handleCreateOrder($event)"
+  [sessionId]="sessionId"
 ></app-cart>
 
 <app-orders
