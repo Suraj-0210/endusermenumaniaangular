@@ -120,6 +120,6 @@
 
 <app-checkoutqr
   *ngIf="showQRModal"
-  [qrCodeUrl]="sessionId"
+  [qrData]="sessionId"
   (close)="toggleQRModal()"
 ></app-checkoutqr>

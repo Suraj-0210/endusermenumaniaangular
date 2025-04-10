@@ -39,6 +39,9 @@ export class OrdersComponent {
     this.orderService.getOrdersFromDb(this.sessionId).subscribe({
       next: (orders) => {
         this.paidOrders = orders;
+        if (this.paidOrders) {
+          this.cartService.setHasOrdered(true);
+        }
         this.loading = false;
         console.log(orders);
       },
