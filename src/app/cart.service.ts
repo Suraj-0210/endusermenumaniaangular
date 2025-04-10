@@ -1,6 +1,6 @@
 // cart.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,5 +15,16 @@ export class CartService {
 
   getCurrentCart() {
     return this.cartSubject.getValue(); // if you need to fetch current value
+  }
+
+  private hasOrdered = new BehaviorSubject<boolean>(false);
+  hasOrdered$ = this.hasOrdered.asObservable(); // Exposed observable for components
+
+  setHasOrdered(isOrdered: boolean) {
+    this.hasOrdered.next(isOrdered);
+  }
+
+  getIfOrdered(): boolean {
+    return this.hasOrdered.getValue(); // for sync access
   }
 }

@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { CartService } from '../cart.service';
 import { OrderService } from '../order.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -47,6 +48,19 @@ export class NavbarComponent {
     this.cartService.cart$.subscribe((cart) => {
       this.cart = cart; // real-time update
     });
+
+    this.orderSub = this.cartService.hasOrdered$.subscribe((value) => {
+      this.hasOrdered = value;
+    });
+  }
+
+  hasOrdered: boolean = false;
+  private orderSub!: Subscription;
+
+  ngOnDestroy() {
+    if (this.orderSub) {
+      this.orderSub.unsubscribe(); // prevent memory leaks
+    }
   }
 
   handleCartUpdate(updatedCart: any[]) {
@@ -112,6 +126,7 @@ export class NavbarComponent {
       )
       .then((result) => {
         this.confirmedOrders = [];
+        this.cartService.setHasOrdered(true);
         // maybe close modal or show success alert
       })
       .catch((err) => {

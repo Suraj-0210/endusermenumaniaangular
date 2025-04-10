@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CartService } from '../../cart.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-checkoutqr',
