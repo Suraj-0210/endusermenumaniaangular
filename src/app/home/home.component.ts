@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RestaurantService } from '../services/restaurant.service';
 import { CartService } from '../cart.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -66,15 +67,20 @@ export class HomeComponent {
 
   ngOnInit() {
     // Extract restaurantId and tableNumber
-    this.route.paramMap.subscribe((params) => {
-      this.restaurantId = params.get('restaurantId');
-      if (this.restaurantId) {
-        this.getRestaurantDetails(this.restaurantId);
-      }
-    });
+    const param$ = this.route.paramMap;
+    const query$ = this.route.queryParamMap;
 
-    this.route.queryParamMap.subscribe((params) => {
-      this.tableNumber = params.get('table');
+    combineLatest([param$, query$]).subscribe(([paramMap, queryMap]) => {
+      this.restaurantId = paramMap.get('restaurantId');
+      this.tableNumber = queryMap.get('table');
+
+      if (this.restaurantId && this.tableNumber) {
+        console.log('restaurantId:', this.restaurantId);
+        console.log('tableNumber:', this.tableNumber);
+
+        // Now both values are available - do your logic here
+        this.getRestaurantDetails(this.restaurantId, this.tableNumber);
+      }
     });
 
     this.cartService.cart$.subscribe((cart) => {
@@ -85,27 +91,29 @@ export class HomeComponent {
     console.log(this.tableNumber);
   }
 
-  getRestaurantDetails(restaurantId: string) {
+  getRestaurantDetails(restaurantId: string, tableno: any) {
     this.loading = true;
     this.error = null;
-    this.restaurantService.fetchRestaurantDetails(restaurantId).subscribe({
-      next: (data) => {
-        console.log('Restaurant Data:', data);
-        this.restaurantDetails = data;
+    this.restaurantService
+      .fetchRestaurantDetails(restaurantId, tableno)
+      .subscribe({
+        next: (data) => {
+          console.log('Restaurant Data:', data);
+          this.restaurantDetails = data;
 
-        if (data?.sessionId) {
-          document.cookie = `sessionId=${data.sessionId}; path=/;`;
-          this.sessionId = data.sessionId;
-        }
-      },
-      error: (err) => {
-        this.error = 'Failed to fetch restaurant details.';
-        console.error(err);
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+          if (data?.sessionId) {
+            document.cookie = `sessionId=${data.sessionId}; path=/;`;
+            this.sessionId = data.sessionId;
+          }
+        },
+        error: (err) => {
+          this.error = 'Failed to fetch restaurant details.';
+          console.error(err);
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   getAllDishes(dishes: any) {

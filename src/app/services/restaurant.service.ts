@@ -10,8 +10,9 @@ export class RestaurantService {
 
   constructor(private http: HttpClient) {}
 
-  fetchRestaurantDetails(restaurantId: string): Observable<any> {
+  fetchRestaurantDetails(restaurantId: string, tableNo: any): Observable<any> {
     return this.http.get(`${this.apiUrl}/${restaurantId}`, {
+      params: { tableNo: tableNo },
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
     });
