@@ -7,7 +7,6 @@
 >
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
-      <!-- Header -->
       <div
         class="modal-header bg-light flex-wrap flex-column flex-sm-row align-items-start align-items-sm-center"
       >
@@ -89,9 +88,11 @@
               <span
                 class="badge ms-2"
                 [ngClass]="{
-                  'bg-success': order.status === 'Completed',
+                  'bg-success': order.status === 'Delivered',
                   'bg-danger': order.status === 'Rejected',
-                  'bg-warning': order.status === 'Pending'
+                  'bg-warning': order.status === 'Pending',
+                  'bg-primary': order.status === 'Completed',
+                  'bg-info': order.status === 'Preparing'
                 }"
               >
                 {{ order.status }}
