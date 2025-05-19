@@ -92,7 +92,8 @@
                   'bg-danger': order.status === 'Rejected',
                   'bg-warning': order.status === 'Pending',
                   'bg-primary': order.status === 'Completed',
-                  'bg-info': order.status === 'Preparing'
+                  'bg-info': order.status === 'Preparing',
+                  'bg-secondary': order.status === 'Confirmed'
                 }"
               >
                 {{ order.status }}
