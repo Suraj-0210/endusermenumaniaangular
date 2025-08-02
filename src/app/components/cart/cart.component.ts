@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CartService } from '../../cart.service';
+import { NotificationService } from '../../services/notification.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -40,7 +42,10 @@ export class CartComponent {
 
   @Output() orderChange = new EventEmitter<any[]>(); // 👈 emit updated cart to parent
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private notificationService: NotificationService
+  ) {}
   ngOnInit() {
     this.emitCartLength();
     console.log(this.order);
@@ -54,6 +59,7 @@ export class CartComponent {
   }
 
   changeQuantity(item: any, action: string) {
+    const oldQuantity = item.quantity;
     this.order = this.order.map((cartItem) => {
       if (cartItem._id === item._id) {
         const newQuantity =
@@ -64,20 +70,39 @@ export class CartComponent {
       }
       return cartItem;
     });
+
+    const updatedItem = this.order.find(
+      (cartItem) => cartItem._id === item._id
+    );
+    if (updatedItem && updatedItem.quantity !== oldQuantity) {
+      const actionText = action === 'add' ? 'increased' : 'decreased';
+      this.notificationService.showCartUpdate(
+        `${item.dishname || item.name} quantity ${actionText} to ${
+          updatedItem.quantity
+        }`
+      );
+    }
+
     this.emitCartLength(); // Update cart count
     this.cartService.updateCart(this.order);
   }
 
   removeItem(item: any) {
     this.order = this.order.filter((cartItem) => cartItem._id !== item._id);
+    this.notificationService.showCartUpdate(
+      `${item.dishname || item.name} removed from cart`
+    );
     this.emitCartLength(); // Update cart count
-    // this.orderChange.emit(this.order);
     this.cartService.updateCart(this.order);
   }
 
   payNow() {
     if (this.payAfterService) {
-      alert(`Order placed with Cash on Delivery. Total: ₹${this.totalPrice}`);
+      this.notificationService.showSuccess({
+        title: 'Order Placed!',
+        message: `Order placed with Cash on Delivery. Total: ₹${this.totalPrice}`,
+        duration: 4000,
+      });
       this.handlePaymentSuccess('Pay_After_Service');
       this.order = [];
       this.emitCartLength();
@@ -87,7 +112,7 @@ export class CartComponent {
     }
 
     // Razorpay Payment Flow
-    fetch('https://endusermenumania.onrender.com/create-order', {
+    fetch(`${environment.apiUrl}/create-order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount: this.totalPrice * 100 }),
@@ -103,7 +128,11 @@ export class CartComponent {
             description: 'Test Transaction',
             order_id: data.id,
             handler: (response: any) => {
-              alert(`Payment successful! ID: ${response.razorpay_payment_id}`);
+              this.notificationService.showSuccess({
+                title: 'Payment Successful!',
+                message: `Payment completed successfully. ID: ${response.razorpay_payment_id}`,
+                duration: 4000,
+              });
               this.handlePaymentSuccess(response.razorpay_payment_id);
               this.order = [];
               this.emitCartLength();
@@ -123,12 +152,18 @@ export class CartComponent {
           const razorpay = new (window as any).Razorpay(options);
           razorpay.open();
         } else {
-          alert('Failed to create Razorpay order.');
+          this.notificationService.showError({
+            title: 'Payment Error',
+            message: 'Failed to create Razorpay order.',
+          });
         }
       })
       .catch((err) => {
         console.error(err);
-        alert('Something went wrong while initiating payment.');
+        this.notificationService.showError({
+          title: 'Payment Error',
+          message: 'Something went wrong while initiating payment.',
+        });
       });
   }
 

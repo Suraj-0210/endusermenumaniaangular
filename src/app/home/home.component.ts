@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RestaurantService } from '../services/restaurant.service';
 import { CartService } from '../cart.service';
+import { NotificationService } from '../services/notification.service';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -37,15 +38,24 @@ export class HomeComponent {
       if (existingItem.quantity < dish.stock) {
         existingItem.quantity += 1;
         this.cartService.updateCart(this.cart);
+        this.notificationService.showCartSuccess(
+          dish.name || dish.dishname,
+          existingItem.quantity
+        );
       } else {
-        alert('Cannot add more. Stock limit reached.');
+        this.notificationService.showCartWarning(
+          `Cannot add more ${dish.name || dish.dishname}. Stock limit reached.`
+        );
       }
     } else {
       if (dish.stock > 0) {
         this.cart = [...this.cart, { ...dish, quantity: 1 }];
         this.cartService.updateCart(this.cart);
+        this.notificationService.showCartSuccess(dish.name || dish.dishname);
       } else {
-        alert('Cannot add. Item is out of stock.');
+        this.notificationService.showCartError(
+          `Cannot add ${dish.name || dish.dishname}. Item is out of stock.`
+        );
       }
     }
   }
@@ -62,7 +72,8 @@ export class HomeComponent {
   constructor(
     private route: ActivatedRoute,
     private restaurantService: RestaurantService,
-    private cartService: CartService
+    private cartService: CartService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {

@@ -3,6 +3,7 @@ import jsPDF from 'jspdf';
 import { OrderService } from '../order.service';
 import { Observable } from 'rxjs';
 import { CartService } from '../cart.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-orders',
@@ -15,7 +16,7 @@ export class OrdersComponent {
 
   @Input() sessionId: any;
   @Input() restaurantDetails: any;
-  baseURL: string = 'https://endusermenumania.onrender.com';
+  baseURL: string = environment.apiUrl;
   loading: boolean = true;
 
   closeModal() {

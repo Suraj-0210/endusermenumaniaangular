@@ -39,6 +39,22 @@ export class DishesComponent {
     }
   }
 
+  selectedDish: any = null;
+
+  openDishModal(dish: any) {
+    this.selectedDish = dish;
+    // Bootstrap 5 JS API
+    (window as any).bootstrap.Modal.getOrCreateInstance(
+      document.getElementById('dishModal')!
+    ).show();
+  }
+
+  closeModal() {
+    (window as any).bootstrap.Modal.getInstance(
+      document.getElementById('dishModal')!
+    )?.hide();
+  }
+
   filterDishes() {
     if (this.selectedCategory) {
       if (this.selectedCategory != 'All') {

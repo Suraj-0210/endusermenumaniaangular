@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DishService {
-  private BASE_URL = 'https://endusermenumania.onrender.com';
+  private BASE_URL = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient) {}
 

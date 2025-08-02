@@ -7,7 +7,9 @@ import {
 } from '@angular/core';
 import { CartService } from '../cart.service';
 import { OrderService } from '../order.service';
+import { NotificationService } from '../services/notification.service';
 import { Subscription } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -25,7 +27,7 @@ export class NavbarComponent {
 
   @Output() cartLengthChange = new EventEmitter<number>(); // optional if needed separately
 
-  baseURL = 'https://endusermenumania.onrender.com';
+  baseURL = environment.apiUrl;
   paidOrders: any = [];
   confirmedOrders: any;
   menuOpen = false;
@@ -41,7 +43,8 @@ export class NavbarComponent {
 
   constructor(
     private cartService: CartService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -130,7 +133,10 @@ export class NavbarComponent {
         // maybe close modal or show success alert
       })
       .catch((err) => {
-        alert('Failed to place order. Please try again.');
+        this.notificationService.showError({
+          title: 'Order Failed',
+          message: 'Failed to place order. Please try again.',
+        });
       });
   }
 
@@ -142,15 +148,24 @@ export class NavbarComponent {
       if (existingItem.quantity < dish.stock) {
         existingItem.quantity += 1;
         this.cartService.updateCart(this.cart);
+        this.notificationService.showCartSuccess(
+          dish.name || dish.dishname,
+          existingItem.quantity
+        );
       } else {
-        alert('Cannot add more. Stock limit reached.');
+        this.notificationService.showCartWarning(
+          `Cannot add more ${dish.name || dish.dishname}. Stock limit reached.`
+        );
       }
     } else {
       if (dish.stock > 0) {
         this.cart = [...this.cart, { ...dish, quantity: 1 }];
         this.cartService.updateCart(this.cart);
+        this.notificationService.showCartSuccess(dish.name || dish.dishname);
       } else {
-        alert('Cannot add. Item is out of stock.');
+        this.notificationService.showCartError(
+          `Cannot add ${dish.name || dish.dishname}. Item is out of stock.`
+        );
       }
     }
   }

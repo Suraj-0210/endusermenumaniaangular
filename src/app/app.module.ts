@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,7 @@ import { DishesComponent } from './components/dishes/dishes.component';
 import { FooterComponent } from './footer/footer.component';
 import { OrdersComponent } from './orders/orders.component';
 import { CheckoutqrComponent } from './components/checkoutqr/checkoutqr.component';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,15 @@ import { CheckoutqrComponent } from './components/checkoutqr/checkoutqr.componen
     FooterComponent,
     OrdersComponent,
     CheckoutqrComponent,
+    ToastComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [
+    BrowserModule,
+    CommonModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

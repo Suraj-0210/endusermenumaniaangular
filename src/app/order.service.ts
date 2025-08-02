@@ -1,11 +1,12 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrderService {
-  baseURL: string = 'https://endusermenumania.onrender.com';
+  baseURL: string = `${environment.apiUrl}`;
   private eventSource: EventSource | null = null;
 
   constructor(private zone: NgZone) {}

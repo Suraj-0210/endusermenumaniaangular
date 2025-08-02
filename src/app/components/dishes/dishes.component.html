@@ -1,65 +1,108 @@
+<!-- Outer wrapper -->
 <div class="container bg-light" id="menu">
-  <h2 class="text-center display-7 fw-bold mb-5 text-dark letter-spacing-wide">
+  <h2 class="text-center display-7 fw-bold mb-4 text-dark letter-spacing-wide">
     Our Delicious Dishes
   </h2>
 
+  <!-- Loading / Error States -->
   <div *ngIf="loading" class="text-center text-muted fs-5">Loading...</div>
   <div *ngIf="error" class="text-center text-danger fs-5">{{ error }}</div>
 
-  <div *ngIf="!loading && allDishes.length > 0" class="row g-4">
-    <div *ngFor="let dish of filteredDishes" class="col-6 col-md-4 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-shadow transition-all">
-        <!-- Dish Image -->
+  <!-- Horizontal Dish Rows -->
+  <div *ngIf="!loading && allDishes.length > 0">
+    <div
+      *ngFor="let dish of filteredDishes"
+      class="row dish-row mx-0 mb-3 align-items-center bg-white rounded-3 shadow-sm hover-shadow transition-all cursor-pointer"
+      (click)="openDishModal(dish)"
+    >
+      <!-- IMAGE -->
+      <div class="col-auto p-0">
         <img
           [src]="dish.image"
           [alt]="dish.name"
-          class="card-img-top dish-image"
+          class="dish-thumb rounded-start"
         />
+      </div>
 
-        <div class="card-body d-flex flex-column">
-          <!-- Dish Name -->
-          <h3 class="h5 fw-bold mb-3">{{ dish.name }}</h3>
+      <!-- TEXT BLOCK -->
+      <div class="col py-3 px-3">
+        <h5 class="fw-bold mb-1">{{ dish.name }}</h5>
 
-          <!-- Dish Description -->
-          <p class="card-text text-secondary mb-3 flex-grow-1">
-            {{
-              readMoreStates[dish._id]
-                ? dish.description
-                : (dish.description | slice : 0 : 30) + "..."
-            }}
-            <a
-              class="text-primary cursor-pointer text-decoration-none"
-              (click)="toggleReadMore(dish._id)"
-            >
-              {{ readMoreStates[dish._id] ? "Read Less" : "Read More" }}
-            </a>
-          </p>
-
-          <!-- Price & Stock -->
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="badge bg-primary rounded-pill fs-6"
-              >₹{{ dish.price }}</span
-            >
-            <small class="text-muted">Stock: {{ dish.stock }}</small>
-          </div>
-
-          <!-- Add to Cart Button -->
-          <button
-            class="btn btn-primary w-100 fw-semibold py-2"
-            [disabled]="dish.stock === 0"
-            (click)="handleAddToCart(dish)"
+        <!-- Price & Stock -->
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="badge bg-primary rounded-pill fs-6"
+            >₹{{ dish.price }}</span
           >
-            Add to Cart
-          </button>
+          <small class="text-muted">Stock: {{ dish.stock }}</small>
         </div>
+      </div>
+
+      <!-- ACTION BUTTON -->
+      <div class="col-auto px-3">
+        <button
+          class="btn btn-primary btn-sm fw-semibold px-3 py-1 rounded-pill shadow-sm"
+          [disabled]="dish.stock === 0"
+          (click)="$event.stopPropagation(); handleAddToCart(dish)"
+        >
+          <i class="bi bi-cart-plus"></i>
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- Empty state -->
   <div
     *ngIf="!loading && allDishes.length === 0"
     class="text-center text-muted mt-5 fs-5"
   >
     No dishes available.
+  </div>
+</div>
+
+<!-- ====== BOOTSTRAP 5 MODAL ====== -->
+<div class="modal fade" id="dishModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <button
+          type="button"
+          class="btn-close position-absolute top-0 end-0 m-3 z-3 bg-white rounded-circle p-2"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+
+        <div class="row g-0">
+          <!-- Large Image -->
+          <div class="col-md-6">
+            <img
+              [src]="selectedDish?.image"
+              [alt]="selectedDish?.name"
+              class="img-fluid rounded-start w-100 h-100 object-fit-cover"
+            />
+          </div>
+
+          <!-- Details -->
+          <div class="col-md-6 p-4 d-flex flex-column justify-content-center">
+            <h4 class="fw-bold mb-2">{{ selectedDish?.name }}</h4>
+            <p class="mb-3 text-secondary">{{ selectedDish?.description }}</p>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-primary rounded-pill fs-6">
+                ₹{{ selectedDish?.price }}
+              </span>
+              <small class="text-muted">Stock: {{ selectedDish?.stock }}</small>
+            </div>
+
+            <button
+              class="btn btn-primary btn-sm px-3 py-1 fw-semibold rounded-pill shadow-sm"
+              [disabled]="selectedDish?.stock === 0"
+              (click)="handleAddToCart(selectedDish); closeModal()"
+            >
+              <i class="bi bi-cart-plus me-1"></i> Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
